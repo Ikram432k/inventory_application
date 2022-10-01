@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
+const { DateTime } = require("luxon");
+
 
 const AnimeCreatorSchema = new schema({
     first_name: { type: String, required: true, maxLength: 100 },
@@ -12,17 +14,18 @@ AnimeCreatorSchema.virtual("name").get(function(){
     return this.first_name+" "+this.last_name;
 });
 
-AnimeCreatorSchema
-  .virtual('date_of_birth_formatted')
-  .get(function () {
-    return DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED);
-  })
-AnimeCreatorSchema
-  .virtual('date_of_death_formatted')
-  .get(function () {
-    return DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED);
-  });
 
+AnimeCreatorSchema.virtual("date_of_birth_formatted").get(function () {
+    return this.date_of_birth
+      ? DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED)
+      : "No Info";
+  });
+  
+AnimeCreatorSchema.virtual("date_of_death_formatted").get(function () {
+    return this.date_of_death
+      ? DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED)
+      : "Still Alive";
+  });
 
 //virtual for animeCreator url
 AnimeCreatorSchema.virtual("url").get(function(){

@@ -2,7 +2,18 @@ const AnimeCreator = require("../models/animeCreator");
 
 //display list of all animecreators
 exports.animeCreator_list =(req,res)=>{
-    res.send("NOT IMPEMENTENED: creator list");
+    AnimeCreator.find()
+    .sort([["first_name", "ascending"]])
+    .exec(function (err, list_animeCreator) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render("creator_list", {
+        title: "Creator List",
+        animeCreator_list: list_animeCreator,
+      });
+    });
 };
 
 //display details of a specific animecreator

@@ -1,8 +1,15 @@
 const Availability = require("../models/availability");
 
 //display list of all availability
-exports.availability_list =(req,res)=>{
-    res.send("NOT IMPEMENTENED: availability list");
+exports.availability_list =(req,res,next)=>{
+    Availability.find()
+    .populate("anime")
+    .exec(function(err,list_availability){
+        if(err){
+            return next(err);
+        }
+        res.render("availability_list",{title:"Availability List",availability_list:list_availability});
+    });
 };
 
 //display details of a specific availability

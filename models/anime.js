@@ -14,5 +14,9 @@ Animeschema.virtual("url").get(function(){
     return `/catalog/Anime/${this._id}`;
 });
 
+Animeschema.virtual("name").get(function(){
+    return this.title;
+})
+
 //export model
 module.exports = mongoose.model("Anime",Animeschema);
