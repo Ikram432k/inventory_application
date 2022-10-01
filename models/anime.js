@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Animeschema = new Schema({
     title:{type: String, require: true, maxLength: 100},
-    creator: {type: Schema.Types.ObjectId, ref: "Creator", required: true },
+    creator: {type: Schema.Types.ObjectId, ref: "AnimeCreator", required: true },
     summary:{type: String, require: true, maxLength: 800},
     genre:[{type: Schema.Types.ObjectId, ref: "Genre"}],
 });

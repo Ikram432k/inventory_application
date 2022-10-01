@@ -35,8 +35,16 @@ exports.index = (req,res)=>{
 };
 
 //display list of all anime
-exports.anime_list =(req,res)=>{
-    res.send("NOT IMPEMENTENED: anime list");
+exports.anime_list = function(req,res,next){
+    Anime.find({},"title creator")
+    .sort({title:1})
+    .populate("creator")
+    .exec(function(err,list_anime){
+        if(err){
+            return next(err);
+        }
+        res.render("anime_list",{title:"Anime List",anime_list:list_anime});
+    });
 };
 
 //display details of a specific anime
