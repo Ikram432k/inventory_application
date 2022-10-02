@@ -1,0 +1,18 @@
+extends layout
+
+block content
+
+  h1 ID: #{availability._id}
+
+  p #[strong Title:]
+    a(href=availability.anime.url) #{availability.anime.title}
+  p #[strong Studio:] #{availability.studio}
+
+  p #[strong Status:]
+    if availability.status=='finished airing'
+      span.text-success #{availability.status}
+    else if availability.status=='yet to be aired'
+      span.text-danger #{availability.status}
+    else
+      span.text-warning #{availability.status}
+

@@ -13,8 +13,23 @@ exports.availability_list =(req,res,next)=>{
 };
 
 //display details of a specific availability
-exports.availability_detail =(req,res)=>{
-    res.send(`NOT IMPEMENTENED: availability details :${req.params.id}`);
+exports.availability_detail =(req,res,next)=>{
+    Availability.findById(req.params.id)
+    .populate("anime")
+    .exec((err,availability)=>{
+        if(err){
+            return next(err);
+        }
+        if(availability == null){
+            const err = new Error("Availability not found");
+            err.status = 400;
+            return next(err);
+        }
+        res.render("availability_detail",{
+            title:`${availability.anime.title}`,
+            availability,
+        });
+    });
 };
 
 //display availability create form on GET

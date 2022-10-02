@@ -18,10 +18,6 @@ exports.animeCreator_list =(req,res)=>{
     });
 };
 
-// //display details of a specific animecreator
-// exports.animeCreator_detail =(req,res)=>{
-//     res.send(`NOT IMPEMENTENED: creator details :${req.params.id}`);
-// };
 //display details of a specific animecreator
 exports.animeCreator_detail =(req,res,next)=>{
     async.parallel(
