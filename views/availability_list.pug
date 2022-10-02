@@ -6,7 +6,7 @@ block content
   ul
     each val in availability_list
       li
-        a(href=val.url) #{val.anime.title} : #{val.studio} -
+        a(href=val.url) #{val.anime.title} : #{val.studio} - 
         if val.status=='finished airing'
           span.text-success #{val.status}
         else if val.status=='yet to be aired'
