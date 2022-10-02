@@ -1,4 +1,6 @@
 const AnimeCreator = require("../models/animeCreator");
+const async = require("async");
+const Anime = require("../models/anime");
 
 //display list of all animecreators
 exports.animeCreator_list =(req,res)=>{
@@ -16,11 +18,39 @@ exports.animeCreator_list =(req,res)=>{
     });
 };
 
+// //display details of a specific animecreator
+// exports.animeCreator_detail =(req,res)=>{
+//     res.send(`NOT IMPEMENTENED: creator details :${req.params.id}`);
+// };
 //display details of a specific animecreator
-exports.animeCreator_detail =(req,res)=>{
-    res.send(`NOT IMPEMENTENED: creator details :${req.params.id}`);
-};
+exports.animeCreator_detail =(req,res,next)=>{
+    async.parallel(
+        {
+        creator(callback){
+            AnimeCreator.findById(req.params.id).exec(callback);
+        },
+        creators_anime(callback){
+            Anime.find({creator:req.params.id},"title summary").exec(callback);
 
+        },
+        },
+        (err,results)=>{
+            if(err){
+                return next(err);
+            }
+            if(results.creator == null){
+                const err = new Error("Creator not fount");
+                err.status = 400;
+                return next(err);
+            }
+            res.render("creator_detail",{
+            title:"Creator Detail",
+            creator:results.creator,
+            creators_anime:results.creators_anime,
+        })
+        }
+    )
+};
 //display animecreator create form on GET
 exports.animeCreator_create_get =(req,res)=>{
     res.send("NOT IMPEMENTENED: creator create GET");

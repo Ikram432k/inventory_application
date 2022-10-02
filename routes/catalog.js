@@ -56,7 +56,7 @@ router.get("/animecreater/:id/update",animeCreate_controller.animeCreator_update
 router.post("/animecreater/:id/update",animeCreate_controller.animeCreator_update_post);
 
 //GET request for one animecreater
-router.get("/animecreater/:id",animeCreate_controller.animeCreator_detail);
+router.get("/animeCreator/:id",animeCreate_controller.animeCreator_detail);
 
 //GET request for list of animecreater
 router.get("/animecreaters",animeCreate_controller.animeCreator_list);
