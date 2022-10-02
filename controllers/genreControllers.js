@@ -1,5 +1,7 @@
 const Genre = require("../models/genre");
+const Anime = require("../models/anime");
 
+const async = require("async");
 //display list of all genre
 exports.genre_list =(req,res)=>{
     Genre.find()
@@ -12,9 +14,33 @@ exports.genre_list =(req,res)=>{
 };
 
 //display details of a specific genre
-exports.genre_detail =(req,res)=>{
-    res.send(`NOT IMPEMENTENED: genre details :${req.params.id}`);
+exports.genre_detail =(req,res,next)=>{
+    async.parallel({
+        genre(callback){
+            Genre.findById(req.params.id).exec(callback);
+        },
+        genre_anime(callback){
+            Anime.find({genre:req.params.id}).exec(callback);
+        },
+    },
+    (err,results)=>{
+        if(err){
+            return next(err);
+        }
+        if(results.genre == null){
+            const err = new Error("Genre not found");
+            err.status = 400;
+            return next(err);
+        }
+        res.render("genre_detail",{
+            title:"Genre title",
+            genre:results.genre,
+            genre_anime:results.genre_anime
+        });
+    }
+    );
 };
+
 
 //display genre create form on GET
 exports.genre_create_get =(req,res)=>{
