@@ -152,13 +152,13 @@ function createAnimes(cb) {
 function createAvailability(cb) {
     async.parallel([
         function(callback) {
-            availabilityCreate(animes[0], 'Toei Animation', 'Curently airing', callback)
+          availabilityCreate(animes[0], 'Toei Animation', 'Curently airing', callback)
         },
         function(callback) {
-            availabilityCreate(animes[1], 'wit studio ,mappa studio ', 'yet to be aired', callback)
+          availabilityCreate(animes[1], 'wit studio ,mappa studio ', 'yet to be aired', callback)
         },
         function(callback) {
-            availabilityCreate(animes[2], ' OLM, Inc.','finished airing', callback)
+          availabilityCreate(animes[2], ' OLM, Inc.','finished airing', callback)
         }
         ],
         // Optional callback

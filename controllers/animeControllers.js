@@ -48,8 +48,35 @@ exports.anime_list = function(req,res,next){
 };
 
 //display details of a specific anime
-exports.anime_detail =(req,res)=>{
-    res.send(`NOT IMPEMENTENED: anime details :${req.params.id}`);
+exports.anime_detail =(req,res,next)=>{
+    async.parallel(
+        {
+            anime(callback){
+                Anime.findById(req.params.id)
+                .populate("creator")
+                .populate("genre")
+                .exec(callback)
+            },
+            anime_availability(callback){
+                Availabilty.find({anime:req.params.id}).exec(callback);
+            },
+        },
+        (err,results)=>{
+            if(err){
+                return next(err);
+            }
+            if(results.anime == null){
+                const err = new Error("Anime not found");
+                err.status = 400;
+                return next(err);
+            }
+            res.render("anime_detail",{
+                title:"Anime deatil",
+                anime:results.anime,
+                anime_availability:results.anime_availability,
+            })
+        }
+    )
 };
 
 //display anime create form on GET

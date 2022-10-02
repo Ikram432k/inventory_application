@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1 Title: #{anime.title}
+
+  p #[strong Creator :]
+    a(href=anime.creator.url) #{anime.creator.name}
+  p #[strong Summary:] #{anime.summary}
+  p #[strong Genre:]
+    each val, index in anime.genre
+      a(href=val.url) #{val.name}
+      if index < anime.genre.length - 1
+        |,
+
+  div(style='margin-left:20px;margin-top:20px')
+    h4 Availability
+
+    each val in anime_availability
+      hr
+      if val.status=='finished airing'
+        p.text-success #{val.status}
+      else if val.status=='yet to be aired'
+        p.text-danger #{val.status}
+      else
+        p.text-warning #{val.status}
+      p #[strong Studio:] #{val.studio}
+      p #[strong Id:]
+        a(href=val.url) #{val._id}
+
+    else
+      p There animeis not available in the library.
