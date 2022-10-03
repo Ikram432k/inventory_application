@@ -44,10 +44,10 @@ router.get("/animecreater/create",animeCreate_controller.animeCreator_create_get
 router.post("/animecreater/create",animeCreate_controller.animeCreator_create_post);
 
 //GET request for deleting a animecreater
-router.get("/animecreater/:id/delete",animeCreate_controller.animeCreator_delete_get);
+router.get("/animeCreator/:id/delete",animeCreate_controller.animeCreator_delete_get);
 
 //POST request for deleting a animecreater
-router.post("/animecreater/:id/delete",animeCreate_controller.animeCreator_delete_post);
+router.post("/animeCreator/:id/delete",animeCreate_controller.animeCreator_delete_post);
 
 //GET request for updating a animecreater
 router.get("/animecreater/:id/update",animeCreate_controller.animeCreator_update_get);
