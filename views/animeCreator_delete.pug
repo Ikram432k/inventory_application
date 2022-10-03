@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 #{title}: #{animeCreator.name}
+  //p= author.lifespan
+
+  if creators_anime.length
+
+    p #[strong Delete the following animes before attempting to delete this Anime.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Animes 
+
+      dl
+      each anime  in creators_anime
+        dt
+          a(href=anime.url) #{anime.title}
+        dd #{anime.summary}
+
+  else
+    p Do you really want to delete this Animecreator?
+
+    form(method='POST' action='')
+      div.form-group
+        input#animeCreatorid.form-control(type='hidden',name='animeCreatorid', required='true', value=animeCreator._id )
+
+      button.btn.btn-primary(type='submit') Delete

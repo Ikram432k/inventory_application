@@ -50,7 +50,7 @@ exports.animeCreator_detail =(req,res,next)=>{
 };
 //display animecreator create form on GET
 exports.animeCreator_create_get =(req,res,next)=>{
-    res.render("creator_form",{title:"Create new AnimeCreator"});
+    res.render("creator_form",{title:"Create AnimeCreator"});
 };
 
 //handle animecreator create on POST
@@ -113,14 +113,71 @@ exports.animeCreator_create_post =[
   
 
 //display animecreator delete form on GET
-exports.animeCreator_delete_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: creator delete GET");
-};
+exports.animeCreator_delete_get =(req, res, next) => {
+  async.parallel(
+    {
+      animeCreator(callback) {
+        AnimeCreator.findById(req.params.id).exec(callback);
+      },
+      creators_anime(callback) {
+        Anime.find({ creator: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.animeCreator == null) {
+        // No results.
+        res.redirect("/catalog/animecreaters");
+      }
+      // Successful, so render.
+      res.render("animeCreator_delete", {
+        title: "Delete AnimeCreator",
+        animeCreator: results.animeCreator,
+        creators_anime: results.creators_anime,
+      });
+    }
+  );
+}
 
 //handle animecreator delete on POST
-exports.animeCreator_delete_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: creator delete POST");
+exports.animeCreator_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      animeCreator(callback) {
+        AnimeCreator.findById(req.body.animeCreatorid).exec(callback);
+      },
+      creators_anime(callback) {
+        Anime.find({ creator: req.body.animeCreatorid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.creators_anime.length > 0) {
+        // animeCreator has anime. Render in same way as for GET route.
+        res.render("animeCreator_delete", {
+          title: "Delete AnimeCreator",
+          animeCreator: results.animeCreator,
+          creators_anime: results.creators_anime,
+        });
+        return;
+      }
+      // AnimeCreator has no anime. Delete object and redirect to the list of AnimeCreators.
+      AnimeCreator.findByIdAndRemove(req.body.animeCreatorid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to author list
+        res.redirect("/catalog/animecreaters");
+      });
+    }
+  );
 };
+
 
 //display animecreator update on GET 
 exports.animeCreator_update_get =(req,res)=>{
