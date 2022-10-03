@@ -50,7 +50,7 @@ exports.animeCreator_detail =(req,res,next)=>{
 };
 //display animecreator create form on GET
 exports.animeCreator_create_get =(req,res,next)=>{
-    res.render("creator_form",{title:"Create AnimeCreator"});
+    res.render("creator_form",{title:"Create new AnimeCreator"});
 };
 
 //handle animecreator create on POST
