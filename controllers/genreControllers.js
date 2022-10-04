@@ -96,13 +96,62 @@ exports.genre_create_post = [
   ];
 
 //display genre delete form on GET
-exports.genre_delete_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: genre delete GET");
+exports.genre_delete_get =(req,res,next)=>{
+  async.parallel({
+    genre(callback){
+      Genre.findById(req.params.id).exec(callback);
+    },
+    animes(callback){
+      Anime.find({genre:req.params.id}).exec(callback);
+    }
+  },
+  (err,results)=>{
+    if(err){
+      return next(err);
+    }
+    if(results==null){
+      res.render("/catalog/animes");
+    }
+    res.render("genre_delete",{
+      title:"Delete Genre",
+      genre:results.genre,
+      animes:results.animes,
+    });
+  });
 };
 
 //handle genre delete on POST
-exports.genre_delete_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: genre delete POST");
+exports.genre_delete_post =(req,res,next)=>{
+  async.parallel({
+    genre(callback){
+      Genre.findById(req.body.genreid).exec(callback);
+    },
+    animes(callback){
+      Anime.find({genre:req.body.genreid}).exec(callback);
+    }
+  },(err,results)=>{
+    if(err){
+      return next(err);
+    }
+    // Success
+    if(results.animes.length>0){
+      // animeCreator has anime. Render in same way as for GET route.
+      res.render("genre_delete",{
+        title:"Delete Genre",
+        genre:results.genre,
+        animes:results.animes,
+      });
+      return;
+    }
+    // AnimeCreator has no anime. Delete object and redirect to the list of AnimeCreators.
+    Genre.findByIdAndRemove(req.body.genreid,(err)=>{
+      if(err){
+        return next(err);
+      }
+      // Success - go to genres list
+      res.redirect("/catalog/genres");
+    });
+  })
 };
 
 //display genre update on GET 
