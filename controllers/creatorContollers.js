@@ -171,7 +171,7 @@ exports.animeCreator_delete_post = (req, res, next) => {
         if (err) {
           return next(err);
         }
-        // Success - go to author list
+        // Success - go to animeCreator list
         res.redirect("/catalog/animecreaters");
       });
     }
