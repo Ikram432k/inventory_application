@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const GenreSchema = new schema({
-    name:{type: String, require:true,minLength:5, maxLength:100}
+    name:{type: String, require:true,minLength:4, maxLength:100}
 });
 
 //virtual for genre url
