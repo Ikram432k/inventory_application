@@ -9,11 +9,18 @@ block content
       input#title.form-control(type='text', placeholder='Name of anime' name='title' required='true' value=(undefined===anime ? '' : anime.title) )
     div.form-group
       label(for='creator') Creator:
-      select#creator.form-control(type='select', placeholder='Select creator' name='creator' required='true' )
-        - animeCreators.sort(function(a, b) {let textA = a.first_name.toUpperCase(); let textB = b.first_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-        for creator in animeCreators
+      select#creator.form-control(type='select' placeholder='Select creator' name='creator' required='true' )
+        - creators.sort(function(a, b) {let textA = a.first_name.toUpperCase(); let textB = b.first_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for creator in creators
           if anime
-            option(value=anime._id selected=(anime._id.toString()===anime.creator._id.toString() ? 'selected' : false) ) #{anime.name}
+            //- Handle GET form, where anime.creator is an object, and POST form, where it is a string.
+            option(
+              value=creator._id
+              selected=(
+                creator._id.toString()==anime.creator._id
+                || creator._id.toString()==anime.creator
+              ) ? 'selected' : false
+            ) #{creator.name}
           else
             option(value=creator._id) #{creator.name}
     div.form-group

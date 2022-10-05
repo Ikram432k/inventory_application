@@ -248,11 +248,129 @@ exports.anime_delete_post =(req,res,next)=>{
 };
 
 //display anime update on GET 
-exports.anime_update_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: anime update GET");
+exports.anime_update_get =(req,res,next)=>{
+  async.parallel({
+    anime(callback){
+      Anime.findById(req.params.id)
+      .populate("creator")
+      .populate("genre")
+      .exec(callback);
+    },
+    creators(callback){
+      AnimeCreator.find(callback);
+    },
+    genres(callback){
+      Genre.find(callback);
+    },
+  },(err,results)=>{
+    if(err){
+      return next(err);
+    }
+    if(results==null){
+      const err = new Error("anime not found");
+      err.status = 404;
+      return next(err);
+    }
+    for(const genre of results.genres){
+      for(const animeGenre of results.anime.genre){
+        if(genre._id.toString()===animeGenre._id.toString()){
+          genre.checked="true";
+        }
+      }
+    }
+    res.render("anime_form",{
+      title:"Update Anime",
+      creators:results.creators,
+      genres:results.genres,
+      anime:results.anime,
+    });
+  });
 };
 
 //handle anime update on POST
-exports.anime_update_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: anime update POST");
-};
+exports.anime_update_post =[
+  // Convert the genre to an array
+  (req, res, next) => {
+    if (!Array.isArray(req.body.genre)) {
+      req.body.genre =
+        typeof req.body.genre === "undefined" ? [] : [req.body.genre];
+    }
+    next();
+  },
+
+  // Validate and sanitize fields.
+  body("title", "Title must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("creator", "creator must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("summary", "Summary must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("genre.*").escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a anime object with escaped/trimmed data and old id.
+    const anime = new Anime({
+      title: req.body.title,
+      creator: req.body.creator,
+      summary: req.body.summary,
+      genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+      _id: req.params.id, //This is required, or a new ID will be assigned!
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      // Get all creators and genres for form.
+      async.parallel(
+        {
+          creators(callback) {
+            AnimeCreator.find(callback);
+          },
+          genres(callback) {
+            Genre.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          // Mark our selected genres as checked.
+          for (const genre of results.genres) {
+            if (anime.genre.includes(genre._id)) {
+              genre.checked = "true";
+            }
+          }
+          res.render("anime_form", {
+            title: "Update Anime",
+            creators: results.creators,
+            genres: results.genres,
+            anime,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Update the record.
+    Anime.findByIdAndUpdate(req.params.id, anime, {}, (err, results) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful: redirect to anime detail page.
+      res.redirect(results.url);
+    });
+  },
+];
