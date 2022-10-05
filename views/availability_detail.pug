@@ -15,4 +15,6 @@ block content
       span.text-danger #{availability.status}
     else
       span.text-warning #{availability.status}
-
+    hr
+    p
+      a(href=availability.url+'/delete') Delete Availability 

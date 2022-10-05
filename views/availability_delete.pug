@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 #{title}: #{availability.anime}
+  p Do you really want to delete this Availability?
+    form(method='POST' action='')
+      div.form-group
+        input#availabilityid.form-control(type='hidden',name='availabilityid', required='true', value=availability._id )
+
+      button.btn.btn-primary(type='submit') Delete  
+

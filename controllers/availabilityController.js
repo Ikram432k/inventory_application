@@ -2,6 +2,7 @@ const Availability = require("../models/availability");
 const Anime = require("../models/anime");
 const { body, validationResult } = require("express-validator");
 
+const async = require("async");
 //display list of all availability
 exports.availability_list =(req,res,next)=>{
     Availability.find()
@@ -102,13 +103,44 @@ exports.availability_create_post = [
 
 
 //display availability delete form on GET
-exports.availability_delete_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: availability delete GET");
+exports.availability_delete_get =(req,res,next)=>{
+  async.parallel(
+    {
+    animeAvailability(callback){
+      Availability.findById(req.params.id).exec(callback);
+    }
+    },(err,results)=>{
+      if(err){
+        return next(err);
+      }
+      if(results==null){
+        res.render("/catalog/availabilities");
+      }
+      res.render("availability_delete",{
+        title:"Delete Availability",
+        availability:results.animeAvailability,
+      });
+    }
+  );
 };
 
 //handle availability delete on POST
-exports.availability_delete_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: availability delete POST");
+exports.availability_delete_post =(req,res,next)=>{
+  async.parallel({
+    animeAvailability(callback){
+      Availability.findById(req.body.availabilityid).exec(callback);
+    }},(err,results)=>{
+      if(err){
+        return next(err);
+      }
+      Availability.findByIdAndRemove(req.body.availabilityid,(err)=>{
+        if(err){
+          return next(err);
+        }
+        res.redirect("/catalog/availabilities");
+      })
+    }
+  );
 };
 
 //display availability update on GET 
