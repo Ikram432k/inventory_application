@@ -110,7 +110,7 @@ exports.genre_delete_get =(req,res,next)=>{
       return next(err);
     }
     if(results==null){
-      res.render("/catalog/animes");
+      res.render("/catalog/genres");
     }
     res.render("genre_delete",{
       title:"Delete Genre",
