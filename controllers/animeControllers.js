@@ -193,13 +193,58 @@ exports.anime_create_post = [
 
 
 //display anime delete form on GET
-exports.anime_delete_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: anime delete GET");
+exports.anime_delete_get =(req,res,next)=>{
+  async.parallel({
+    anime(callback){
+      Anime.findById(req.params.id).exec(callback);
+    },
+    animeAvailability(callback){
+      Availabilty.find({anime:req.params.id}).exec(callback);
+    }
+  },
+  (err,results)=>{
+    if(err){
+      return next(err);
+    }
+    if(results==null){
+      res.render("/catalog/animes");
+    }
+    res.render("anime_delete",{
+      title:"Delete Anime",
+      anime:results.anime,
+      animeAvailability:results.animeAvailability,
+    });
+  });
 };
 
 //handle anime delete on POST
-exports.anime_delete_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: anime delete POST");
+exports.anime_delete_post =(req,res,next)=>{
+  async.parallel({
+    anime(callback){
+      Anime.findById(req.body.animeid).exec(callback);
+    },
+    animeAvailability(callback){
+      Availabilty.find({anime:req.body.animeid}).exec(callback);
+    }
+  },(err,results)=>{
+    if(err){
+      return next(err);
+    }
+    if(results.animeAvailability.length>0){
+      res.render("anime_delete",{
+        title:"Delete Anime",
+        anime:results.anime,
+        animeAvailability:results.animeAvailability,
+      });
+      return;
+    }
+    Anime.findByIdAndRemove(req.body.animeid,(err,results)=>{
+      if(err){
+        return next(err);
+      }
+      res.redirect("/catalog/animes");
+    })
+  })
 };
 
 //display anime update on GET 

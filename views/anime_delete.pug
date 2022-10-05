@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1 #{title}: #{anime.title}
+  //p= author.lifespan
+
+  if animeAvailability.length
+
+    p #[strong Delete the following details of availability of anime before attempting to delete this Anime.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Availability  
+
+      dl
+      each val  in animeAvailability
+        hr
+        if val.status=='finished airing'
+         p.text-success #{val.status}
+        else if val.status=='yet to be aired'
+           p.text-danger #{val.status}
+        else
+          p.text-warning #{val.status}
+        p #[strong Status:] #{val.studio}
+        p #[strong Id:]
+            a(href=val.url) #{val._id}
+
+  else
+    p Do you really want to delete this Anime?
+
+    form(method='POST' action='')
+      div.form-group
+        input#animeid.form-control(type='hidden',name='animeid', required='true', value=anime._id )
+
+      button.btn.btn-primary(type='submit') Delete
