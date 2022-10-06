@@ -144,11 +144,84 @@ exports.availability_delete_post =(req,res,next)=>{
 };
 
 //display availability update on GET 
-exports.availability_update_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: availability update GET");
+exports.availability_update_get =function (req, res, next) {
+  // Get book, authors and genres for form.
+  async.parallel(
+    {
+      availability: function (callback) {
+        Availability.findById(req.params.id).populate("anime").exec(callback);
+      },
+      animes: function (callback) {
+        Anime.find(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.availability == null) {
+        // No results.
+        var err = new Error("Book copy not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Success.
+      res.render("availability_form", {
+        title: "Update  Availability",
+        anime_list: results.animes,
+        selected_anime: results.availability.anime._id,
+        availability: results.availability,
+      });
+    }
+  );
 };
 
+
 //handle availability update on POST
-exports.availability_update_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: availability update POST");
-};
+exports.availability_update_post =[
+
+  // Validate and sanitize fields.
+  body('anime', 'Name of anime must be specified').trim().isLength({ min: 1 }).escape(),
+  body('studio', 'studio name must be specified').trim().isLength({ min: 1 }).escape(),
+  body('status').escape(),
+  
+  
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+
+      // Extract the validation errors from a request.
+      const errors = validationResult(req);
+
+      // Create a BookInstance object with escaped/trimmed data and current id.
+      var availability = new Availability(
+        { anime: req.body.anime,
+          studio: req.body.studio,
+          status: req.body.status,
+          _id: req.params.id
+         });
+
+      if (!errors.isEmpty()) {
+          // There are errors so render the form again, passing sanitized values and errors.
+          Anime.find({},'title')
+              .exec(function (err, animes) {
+                  if (err) { return next(err); }
+                  // Successful, so render.
+                  res.render('availability_form', { 
+                  title: 'Update Availability', 
+                  anime_list : animes, 
+                  selected_anime : availability.anime._id , 
+                  errors: errors.array(),
+                  availability:availability });
+          });
+          return;
+      }
+      else {
+          // Data from form is valid.
+          Availability.findByIdAndUpdate(req.params.id, availability, {}, function (err,theavailability) {
+              if (err) { return next(err); }
+                 // Successful - redirect to detail page.
+                 res.redirect(theavailability.url);
+              });
+      }
+  }
+];
