@@ -180,11 +180,63 @@ exports.animeCreator_delete_post = (req, res, next) => {
 
 
 //display animecreator update on GET 
-exports.animeCreator_update_get =(req,res)=>{
-    res.send("NOT IMPEMENTENED: creator update GET");
+exports.animeCreator_update_get =function (req, res, next) {
+
+  AnimeCreator.findById(req.params.id, function (err, creator) {
+      if (err) { return next(err); }
+      if (creator == null) { // No results.
+          var err = new Error('Anime Creator not found');
+          err.status = 404;
+          return next(err);
+      }
+      // Success.
+      //res.send("success")
+      res.render('creator_form', { title: 'Update Anime Creator', creator: creator });
+
+  });
 };
 
 //handle animecreator update on POST
-exports.animeCreator_update_post =(req,res)=>{
-    res.send("NOT IMPEMENTENED: creator update POST");
-};
+exports.animeCreator_update_post =[
+
+  // Validate and santize fields.
+  body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
+      .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+  body('last_name').trim().isLength({ min: 1 }).escape().withMessage('Last name must be specified.')
+      .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+  body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
+  body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
+
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+
+      // Extract the validation errors from a request.
+      const errors = validationResult(req);
+
+      // Create creator object with escaped and trimmed data (and the old id!)
+      var creator = new AnimeCreator(
+          {
+              first_name: req.body.first_name,
+              last_name: req.body.last_name,
+              date_of_birth: req.body.date_of_birth,
+              date_of_death: req.body.date_of_death,
+              _id: req.params.id
+          }
+      );
+
+      if (!errors.isEmpty()) {
+          // There are errors. Render the form again with sanitized values and error messages.
+          res.render('creator_form', { title: 'Update Anime creator', creator: creator, errors: errors.array() });
+          return;
+      }
+      else {
+          // Data from form is valid. Update the record.
+          AnimeCreator.findByIdAndUpdate(req.params.id, creator, {}, function (err, thecreator) {
+              if (err) { return next(err); }
+              // Successful - redirect to Anime creator detail page.
+              res.redirect(thecreator.url);
+          });
+      }
+  }
+];
