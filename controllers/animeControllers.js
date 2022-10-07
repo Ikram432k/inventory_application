@@ -136,17 +136,11 @@ exports.anime_create_post = [
       // Extract the validation errors from a request.
       const errors = validationResult(req);
 
-      // const receivedPath = req.file;
-      // console.log(receivedPath);
-      //const cleanedPath = receivedPath.slice(6)
-      
-      // Create a anime object with escaped and trimmed data.
       const anime = new Anime({
         title: req.body.title,
         creator: req.body.creator,
         summary: req.body.summary,
         genre: req.body.genre,
-        // picture: receivedPath,
 
       });
   
