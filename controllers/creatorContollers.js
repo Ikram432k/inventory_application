@@ -69,7 +69,7 @@ exports.animeCreator_create_post =[
       .escape()
       .withMessage("Last name must be specified.")
       .isAlphanumeric()
-      .withMessage("Family name has non-alphanumeric characters."),
+      .withMessage("Last name has non-alphanumeric characters."),
     body("date_of_birth", "Invalid date of birth")
       .optional({ checkFalsy: true })
       .isISO8601()
@@ -86,7 +86,7 @@ exports.animeCreator_create_post =[
       if (!errors.isEmpty()) {
         // There are errors. Render form again with sanitized values/errors messages.
         res.render("creator_form", {
-          title: "Create Author",
+          title: "Create Creator",
           creator: req.body,
           errors: errors.array(),
         });
@@ -94,7 +94,7 @@ exports.animeCreator_create_post =[
       }
       // Data from form is valid.
   
-      // Create an Author object with escaped and trimmed data.
+      // Create an creator object with escaped and trimmed data.
       const creator = new AnimeCreator({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
@@ -203,7 +203,7 @@ exports.animeCreator_update_post =[
   body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
       .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
   body('last_name').trim().isLength({ min: 1 }).escape().withMessage('Last name must be specified.')
-      .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+      .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
   body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
   body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
 
