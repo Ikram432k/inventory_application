@@ -1,35 +1,40 @@
 extends layout
 
 block content
-  h1 #{title}: #{anime.title}
-  //p= author.lifespan
+  div.content-anime
+    div.head
+      h1 #{title}: #{anime.title}
 
-  if animeAvailability.length
+    if animeAvailability.length
+      div.anime
+        p #[strong Delete the following Telecast Details of anime before attempting to delete this Anime.]
+      div.anime
+        h2 Telecast Details :
 
-    p #[strong Delete the following details of availability of anime before attempting to delete this Anime.]
-
-    div(style='margin-left:20px;margin-top:20px')
-
-      h4 Availability  
-
-      dl
       each val  in animeAvailability
         hr
         if val.status=='finished airing'
-         p.text-success #{val.status}
+          div.anime
+            p #[strong Status:] #{val.status}
         else if val.status=='yet to be aired'
-           p.text-danger #{val.status}
+          div.anime
+            p #[strong Status:] #{val.status}
         else
-          p.text-warning #{val.status}
-        p #[strong Status:] #{val.studio}
-        p #[strong Id:]
+          div.anime
+            p #[strong Status:] #{val.status}
+        div.anime
+          p #[strong Studio:] #{val.studio}
+        div.anime
+          p #[strong Database_Id:] 
             a(href=val.url) #{val._id}
 
-  else
-    p Do you really want to delete this Anime?
-
-    form(method='POST' action='')
-      div.form-group
-        input#animeid.form-control(type='hidden',name='animeid', required='true', value=anime._id )
-
-      button.btn.btn-primary(type='submit') Delete
+    else
+      div.formView
+        form(method='POST' action='')
+          div.form-group
+            p Do you really want to delete this Anime?
+              input#animeid.form-control(type='hidden',name='animeid', required='true', value=anime._id )
+          div.form-btn
+            button.btn.btn-primary(type='submit') Delete
+            p
+              a.delete(href='/catalog/animes') cancel

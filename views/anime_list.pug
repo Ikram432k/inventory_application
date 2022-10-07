@@ -1,13 +1,13 @@
 extends layout 
 
 block content 
-    h1= title 
-
-    ul 
-        each anime in anime_list 
-            li 
-                a(href=anime.url) #{anime.title}
-                |  (#{anime.creator.name})
+    div.outer
+        h1= title
+        div.main
+            each anime in anime_list 
+                div.second
+                    a(href=anime.url) #{anime.title}
+                    |  (#{anime.creator.name})
         
-        else 
-            li there are no anime 
+            else 
+               li there are no anime 

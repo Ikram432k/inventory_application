@@ -85,7 +85,7 @@ exports.anime_create_get =(req, res, next) => {
     // Get all animeCreator and genres, which we can use for adding to our anime.
     async.parallel(
       {
-        animeCreators(callback) {
+        creators(callback) {
             AnimeCreator.find(callback);
         },
         genres(callback) {
@@ -98,7 +98,7 @@ exports.anime_create_get =(req, res, next) => {
         }
         res.render("anime_form", {
           title: "Create anime",
-          animeCreators: results.animeCreators,
+          creators: results.creators,
           genres: results.genres,
         });
       }
@@ -135,13 +135,19 @@ exports.anime_create_post = [
     (req, res, next) => {
       // Extract the validation errors from a request.
       const errors = validationResult(req);
-  
+
+      // const receivedPath = req.file;
+      // console.log(receivedPath);
+      //const cleanedPath = receivedPath.slice(6)
+      
       // Create a anime object with escaped and trimmed data.
       const anime = new Anime({
         title: req.body.title,
         creator: req.body.creator,
         summary: req.body.summary,
         genre: req.body.genre,
+        // picture: receivedPath,
+
       });
   
       if (!errors.isEmpty()) {
@@ -150,7 +156,7 @@ exports.anime_create_post = [
         // Get all animeCreator and genres for form.
         async.parallel(
           {
-            animeCreators(callback) {
+            creators(callback) {
                 AnimeCreator.find(callback);
             },
             genres(callback) {
@@ -170,7 +176,7 @@ exports.anime_create_post = [
             }
             res.render("anime_form", {
               title: "Create Anime",
-              animeCreators: results.animeCreators,
+              creators: results.creators,
               genres: results.genres,
               anime,
               errors: errors.array(),
@@ -180,7 +186,7 @@ exports.anime_create_post = [
         return;
       }
   
-      // Data from form is valid. Save anime.
+      //Data from form is valid. Save anime.
       anime.save((err) => {
         if (err) {
           return next(err);
@@ -317,13 +323,15 @@ exports.anime_update_post =[
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-
+    const receivedPath = req.file.path;
+    const cleanedPath = receivedPath.slice(6);
     // Create a anime object with escaped/trimmed data and old id.
     const anime = new Anime({
       title: req.body.title,
       creator: req.body.creator,
       summary: req.body.summary,
       genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+      picture: req.body.picture,
       _id: req.params.id, //This is required, or a new ID will be assigned!
     });
 

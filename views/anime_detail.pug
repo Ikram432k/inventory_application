@@ -1,36 +1,49 @@
 extends layout
 
 block content
-  h1 Title: #{anime.title}
+  div.content-anime
+    div.head
+      h1 Title: #{anime.title}
 
-  p #[strong Creator :]
-    a(href=anime.creator.url) #{anime.creator.name}
-  p #[strong Summary:] #{anime.summary}
-  p #[strong Genre:]
-    each val, index in anime.genre
-      a(href=val.url) #{val.name}
-      if index < anime.genre.length - 1
-        |,
+    div.anime
+      p #[strong CREATOR : ]
+        a(href=anime.creator.url) #{anime.creator.name}
+    div.anime
+      p #[strong SUMMARY : ] #{anime.summary}
+    div.anime
+      p #[strong GENRE : ]
+        each val, index in anime.genre
+          a(href=val.url) #{val.name}
+          if index < anime.genre.length - 1
+            |,
+    div.content-anime
+      div.head
+        h1 Telecast Details
 
-  div(style='margin-left:20px;margin-top:20px')
-    h4 Availability
+      each val in anime_availability
+        hr
+        if val.status=='finished airing'
+          div.anime
+            p #[strong Airing status : ] #{val.status}
+        else if val.status=='yet to be aired'
+          div.anime
+            p #[strong Airing status : ] #{val.status}
+        else
+          div.anime
+            p #[strong Airing status : ] #{val.status}
+        div.anime
+          p #[strong Studio :] #{val.studio}
+        div.anime
+          p #[strong Database Id :] 
+            a(href=val.url) #{val._id}
 
-    each val in anime_availability
-      hr
-      if val.status=='finished airing'
-        p.text-success #{val.status}
-      else if val.status=='yet to be aired'
-        p.text-danger #{val.status}
       else
-        p.text-warning #{val.status}
-      p #[strong Studio:] #{val.studio}
-      p #[strong Id:]
-        a(href=val.url) #{val._id}
-
-    else
-      p There is no details of availability of this anime in the library.
-    hr
-    p
-      a(href=anime.url+'/delete') Delete Anime 
-    p
-      a(href=anime.url+'/update') Update Anime
+        div.content-anime
+          div.anime
+            p There is no details of Telecast Details of this anime in the library.
+      hr
+      div.btns
+        p
+          a.delete(href=anime.url+'/delete') Delete Anime 
+        p
+          a.delete(href=anime.url+'/update') Update Anime
