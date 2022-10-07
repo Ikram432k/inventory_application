@@ -1,20 +1,31 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #[em Anime Library], This library consists of details of diffrent anime .
+  div.outer
+    div.anime
+      h1= title
+    div.anime
+      p Welcome to #[em Anime Library], This library consists of details of diffrent anime. The anime library has the following record counts
+    
+    if error
+      p Error getting dynamic content.
+    else
 
-  h1 Dynamic content
-
-  if error
-    p Error getting dynamic content.
-  else
-    p The anime library has the following record counts:
-
-    ul
-      li #[strong Anime:] !{data.anime_count}
-      //li #[strong Copies:] !{data.availability_count}
-      li #[strong Anime available now:] !{data.availability_finished_count}
-      li #[strong Creators:] !{data.animeCreator_count}
-      li #[strong Genres:] !{data.genre_count}
-
+    div 
+      div.second-home
+        div.anime
+          p #[strong Anime:] !{data.anime_count} 
+            a(href='/catalog/anime/create')  Create anime
+      div.second-home
+        div.anime
+          p #[strong Creators:] !{data.animeCreator_count} 
+            a(href='/catalog/animecreater/create')  Create anime creater
+      div.second-home
+        div.anime
+          p #[strong Telecast Details:] !{data.availability_count} 
+            a(href='/catalog/availability/create')  Create Telecast details
+      div.second-home
+        div.anime
+          p #[strong Genres:] !{data.genre_count} 
+            a(href='/catalog/genre/create')  Create genre
+ 
