@@ -1,28 +1,29 @@
 extends layout
 
 block content
-  h1 #{title}: #{genre.name}
-  //p= author.lifespan
+  div.anime
+    div.head
+      h1 #{title}: #{genre.name}
 
   if animes.length
+    div.anime
+      p #[strong Delete the following animes before attempting to delete this Genre.]
+    div.anime
+      h2 Animes 
 
-    p #[strong Delete the following animes before attempting to delete this Genre.]
-
-    div(style='margin-left:20px;margin-top:20px')
-
-      h4 Animes 
-
-      dl
       each anime  in animes
-        dt
+        div.anime
           a(href=anime.url) #{anime.title}
-        dd #{anime.summary}
+        div.anime
+          p #{anime.summary}
 
   else
-    p Do you really want to delete this Genre?
-
-    form(method='POST' action='')
-      div.form-group
-        input#genreid.form-control(type='hidden',name='genreid', required='true', value=genre._id )
-
-      button.btn.btn-primary(type='submit') Delete
+    div.formView
+      form(method='POST' action='')
+        div.form-group
+          p Do you really want to delete this Genre?
+            input#genreid.form-control(type='hidden',name='genreid', required='true', value=genre._id )
+        div.form-btn
+          button.btn.btn-primary(type='submit') Delete
+          p
+            a.delete(href='/catalog/genres') cancel

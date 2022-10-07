@@ -1,23 +1,25 @@
 extends layout
 
 block content
+  div.content-anime
+    div.head-creator
+      h1 Genre: #{genre.name}
 
-  h1 Genre: #{genre.name}
-
-  div(style='margin-left:20px;margin-top:20px')
-
-    h4 Animes 
-
-    dl
-      each anime in genre_anime
-        dt
-          a(href=anime.url) #{anime.title}
+  div.content-anime
+    div.anime
+      h2 Animes available in this genre :  
+    each anime in genre_anime
+      div.anime
+        a(href=anime.url) #{anime.title}
+      div.anime
         dd #{anime.summary}
 
-      else
+    else
+      div.anime
         p This genre has no anime
-      hr
+    hr
+    div.btns
       p
-        a(href=genre.url+'/delete') Delete Genre
+        a.delete(href=genre.url+'/delete') Delete Genre 
       p
-        a(href=genre.url+'/update') Update Genre
+        a.delete(href=genre.url+'/update') Update Genre
