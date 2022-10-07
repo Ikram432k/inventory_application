@@ -1,13 +1,13 @@
 extends layout
 
 block content
-  h1= title
+  div.outer
+    h1= title
+    div.main
+      each creator in animeCreator_list
+        div.second
+          a(href=creator.url) #{creator.name}
+          |  (#{creator.date_of_birth_formatted} - #{creator.date_of_death_formatted})
 
-  ul
-    each creator in animeCreator_list
-      li
-        a(href=creator.url) #{creator.name}
-        |  (#{creator.date_of_birth_formatted} - #{creator.date_of_death_formatted})
-
-    else
-      li There are no authors.
+      else
+        li There are no authors.

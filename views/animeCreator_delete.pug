@@ -1,28 +1,31 @@
 extends layout
 
 block content
-  h1 #{title}: #{animeCreator.name}
+  div.content
+    div.head
+      h1 #{title} : #{animeCreator.name}
   //p= author.lifespan
 
   if creators_anime.length
-
-    p #[strong Delete the following animes before attempting to delete this Anime.]
-
-    div(style='margin-left:20px;margin-top:20px')
-
+    div.anime
+      p #[strong Delete the following animes before attempting to delete this Anime.]
+    div.anime
       h4 Animes 
 
-      dl
-      each anime  in creators_anime
-        dt
-          a(href=anime.url) #{anime.title}
-        dd #{anime.summary}
+    each anime  in creators_anime
+      div.anime
+        a(href=anime.url) #{anime.title}
+      div.anime
+        p #{anime.summary}
 
   else
-    p Do you really want to delete this Animecreator?
+    div.formView
+      form(method='POST' action='')
+        div.form-group
+          p Do you really want to delete this Animecreator?
+            input#animeCreatorid.form-control(type='hidden',name='animeCreatorid', required='true', value=animeCreator._id )
 
-    form(method='POST' action='')
-      div.form-group
-        input#animeCreatorid.form-control(type='hidden',name='animeCreatorid', required='true', value=animeCreator._id )
-
-      button.btn.btn-primary(type='submit') Delete
+        div.form-btn
+          button.btn.btn-primary(type='submit') Delete
+          p
+            a.delete(href='/catalog/animecreaters') cancel

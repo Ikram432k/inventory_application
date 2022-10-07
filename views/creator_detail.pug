@@ -1,24 +1,25 @@
 extends layout
 
 block content
+  div.content-anime
+    div.head-creator
+      h1 Anime Creator: #{creator.name}
+      p #{creator.date_of_birth_formatted} - #{creator.date_of_death_formatted}
+  div.content-anime
+    div.anime
+      h2 Creator of following animes :
 
-  h1 Anime Creator: #{creator.name}
-  p #{creator.date_of_birth_formatted} - #{creator.date_of_death_formatted}
+    each anime in creators_anime
+      div.anime
+        a(href=anime.url) #{anime.title}
+      div.anime  
+        p #{anime.summary}
 
-  div(style='margin-left:20px;margin-top:20px')
-
-    h4 Animes
-
-    dl
-      each anime in creators_anime
-        dt
-          a(href=anime.url) #{anime.title}
-        dd #{anime.summary}
-
-      else
-        p This Creator has no anime.
-      hr
+    else
+      p This Creator has no anime.
+    hr
+    div.btns
       p
-        a(href=creator.url+'/delete') Delete Anime Creator
+        a.delete(href=creator.url+'/delete') Delete Anime creator 
       p
-        a(href=creator.url+'/update') Update Anime Creator
+        a.delete(href=creator.url+'/update') Update Anime creator
