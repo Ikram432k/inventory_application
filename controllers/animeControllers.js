@@ -317,15 +317,13 @@ exports.anime_update_post =[
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-    const receivedPath = req.file.path;
-    const cleanedPath = receivedPath.slice(6);
+
     // Create a anime object with escaped/trimmed data and old id.
     const anime = new Anime({
       title: req.body.title,
       creator: req.body.creator,
       summary: req.body.summary,
       genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
-      picture: req.body.picture,
       _id: req.params.id, //This is required, or a new ID will be assigned!
     });
 
