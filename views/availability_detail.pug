@@ -1,22 +1,25 @@
 extends layout
 
 block content
-
-  h1 ID: #{availability._id}
-
-  p #[strong Title:]
-    a(href=availability.anime.url) #{availability.anime.title}
-  p #[strong Studio:] #{availability.studio}
-
-  p #[strong Status:]
-    if availability.status=='finished airing'
-      span.text-success #{availability.status}
-    else if availability.status=='yet to be aired'
-      span.text-danger #{availability.status}
-    else
-      span.text-warning #{availability.status}
+  div.content-anime
+    div.anime
+      h1 #[strong Title:] 
+        a(href=availability.anime.url) #{availability.anime.title}
+    div.anime
+      p Database_ID:  #{availability._id}
+    div.anime
+      p #[strong Studio:] #{availability.studio}
+    div.anime
+      p #[strong Status:] 
+        if availability.status=='finished airing'
+          span.text-success #{availability.status}
+        else if availability.status=='yet to be aired'
+          span.text-danger #{availability.status}
+        else
+          span.text-warning #{availability.status}
     hr
-    p
-      a(href=availability.url+'/delete') Delete Availability 
-    p
-      a(href=availability.url+'/update') Update Availability
+    div.btns
+      p
+        a.delete(href=availability.url+'/delete') Delete Telecast details 
+      p
+        a.delete(href=availability.url+'/update') Update Telecast details

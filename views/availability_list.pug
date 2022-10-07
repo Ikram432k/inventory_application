@@ -1,18 +1,18 @@
 extends layout
 
 block content
-  h1= title
+  div.outer
+    h1= title
+    div.main
+      each val in availability_list
+        div.second
+          a(href=val.url) #{val.anime.title} : #{val.studio} - 
+          if val.status=='finished airing'
+            span.text-success #{val.status}
+          else if val.status=='yet to be aired'
+            span.text-danger #{val.status}
+          else
+            span.text-warning #{val.status}
 
-  ul
-    each val in availability_list
-      li
-        a(href=val.url) #{val.anime.title} : #{val.studio} - 
-        if val.status=='finished airing'
-          span.text-success #{val.status}
-        else if val.status=='yet to be aired'
-          span.text-danger #{val.status}
-        else
-          span.text-warning #{val.status}
-
-    else
-      li There are no anime available in this library.
+      else
+        li There are no anime available in this library.

@@ -1,11 +1,16 @@
 extends layout
 
 block content
-  h1 #{title}: #{availability.anime}
-  p Do you really want to delete this Availability?
-    form(method='POST' action='')
-      div.form-group
-        input#availabilityid.form-control(type='hidden',name='availabilityid', required='true', value=availability._id )
+  div.content
+    div.head
+      h1 #{title}: #{availability.anime}
+    div.formView
+      form(method='POST' action='')
+        div.form-group
+          p Do you really want to delete this Telecast Detail?
+            input#availabilityid.form-control(type='hidden',name='availabilityid', required='true', value=availability._id )
 
-      button.btn.btn-primary(type='submit') Delete  
-
+        div.form-btn
+          button.btn.btn-primary(type='submit') Delete
+          p
+            a.delete(href='/catalog/availabilities') cancel
