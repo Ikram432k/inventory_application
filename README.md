@@ -6,7 +6,7 @@ Preview -> [Check it out](https://inventory-application01.herokuapp.com/catalog)
 
 Inventory applicaion was built using nodejs and express .It helps the user to manage mongodb database and perform CURD operation in the database using model,view and controllers 
 
-![](preview.png)
+![](demo.png)
 
 ## Technologies used:
 
