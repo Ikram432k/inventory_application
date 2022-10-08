@@ -5,15 +5,19 @@ block content
     form(method='POST' action='' )
       p=title
         div.form-group
-          label(for='first_name') First Name:
-          input#first_name.form-control(type='text' placeholder='First name (Christian)' name='first_name' required='true' value=(undefined===creator ? '' : creator.first_name) )
-          label(for='last_name') Last Name:
-          input#last_name.form-control(type='text' placeholder='Last name (Surname)' name='last_name' required='true' value=(undefined===creator ? '' : creator.last_name))
+          div.anime
+            label(for='first_name') First Name: 
+            input#first_name.form-control(type='text' placeholder='First name ' name='first_name' required='true' value=(undefined===creator ? '' : creator.first_name) )
+          div.anime
+            label(for='last_name') Last Name: 
+            input#last_name.form-control(type='text' placeholder='Last name ' name='last_name' required='true' value=(undefined===creator ? '' : creator.last_name))
         div.form-group
-          label(for='date_of_birth') Date of birth:
-          input#date_of_birth.form-control(type='date' name='date_of_birth' value=(undefined===creator ? '' : creator.date_of_birth) )
-          label(for='date_of_death') Date of death:
-          input#date_of_death.form-control(type='date' name='date_of_death' value=(undefined===creator ? '' : creator.date_of_death) )
+          div.anime
+            label(for='date_of_birth') Date of birth:
+            input#date_of_birth.form-control(type='date' name='date_of_birth' value=(undefined===creator ? '' : creator.date_of_birth) )
+          div.anime
+            label(for='date_of_death') Date of death:
+            input#date_of_death.form-control(type='date' name='date_of_death' value=(undefined===creator ? '' : creator.date_of_death) )
         div.form-btn
           button.btn.btn-primary(type='submit') Submit 
           p
