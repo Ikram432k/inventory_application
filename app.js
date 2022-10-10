@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const dotenv = require("dotenv");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -12,7 +13,14 @@ const catalogRouter = require("./routes/catalog"); //Import routes for "catalog"
 var app = express();
 // Set up mongoose connection
 const mongoose = require("mongoose");
-const mongoDB = "mongodb+srv://odinproject1:odinproject1@cluster0.ce5dyhj.mongodb.net/local_inventory?retryWrites=true&w=majority";
+const result = dotenv.config()
+
+if (result.error) {
+  throw result.error
+}
+
+// console.log(result.parsed.key)
+const mongoDB = result.parsed.key;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
