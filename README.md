@@ -1,6 +1,6 @@
 # Inventory Applicaion
 
-Preview -> [Check it out](https://inventory-application01.herokuapp.com/catalog)
+Preview -> [Check it out](https://inven-0001.herokuapp.com/catalog)
 
 ## Summary :
 
